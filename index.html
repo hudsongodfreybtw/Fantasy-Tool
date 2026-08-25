@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<meta name="color-scheme" content="dark">
+<title>Draft Room — hudgod</title>
+<link rel="stylesheet" href="assets/app.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🏈</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <button class="sync-chip" id="syncChip" type="button" aria-live="polite">
+    <span class="dot" id="syncDot"></span><span id="syncLabel">Manual</span>
+  </button>
+  <div class="where">
+    <span id="roundLabel">Round 1</span>
+    <span class="sep">·</span>
+    <span id="pickLabel">Pick 1</span>
+  </div>
+  <div class="turn" id="turnBox"><span id="turnText">—</span></div>
+</header>
+
+<div class="banner" id="banner" hidden></div>
+
+<main id="main">
+
+  <!-- ================= NOW ================= -->
+  <section class="view" id="view-now">
+    <div class="clockcard" id="clockCard">
+      <div class="clock-main" id="clockMain">Waiting for the draft to start</div>
+      <div class="clock-sub" id="clockSub">Your picks: 7, 18, 31, 42 …</div>
+    </div>
+
+    <div id="warnings" class="warnings"></div>
+
+    <h2 class="sect">Take one of these <span class="sect-note" id="recContext"></span></h2>
+    <div id="recList" class="reclist"></div>
+
+    <h2 class="sect">If you wait until <span id="nextPickInline">—</span></h2>
+    <div class="outlook">
+      <div class="outlook-col">
+        <div class="outlook-head gone">Likely GONE</div>
+        <ul id="goneList" class="minilist"></ul>
+      </div>
+      <div class="outlook-col">
+        <div class="outlook-head safe">Likely still there</div>
+        <ul id="surviveList" class="minilist"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BOARD ================= -->
+  <section class="view" id="view-board" hidden>
+    <div class="boardbar">
+      <input type="search" id="boardSearch" class="search" placeholder="Search players…"
+             autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="chips" id="posChips">
+        <button class="chip on" data-pos="ALL" type="button">All</button>
+        <button class="chip" data-pos="RB" type="button">RB</button>
+        <button class="chip" data-pos="WR" type="button">WR</button>
+        <button class="chip" data-pos="TE" type="button">TE</button>
+        <button class="chip" data-pos="QB" type="button">QB</button>
+        <button class="chip" data-pos="K" type="button">K</button>
+        <button class="chip" data-pos="DEF" type="button">DEF</button>
+      </div>
+      <div class="toggles">
+        <label class="tog"><input type="checkbox" id="hideTaken" checked> Hide drafted</label>
+        <label class="tog"><input type="checkbox" id="sortValue" checked> Sort by fit</label>
+      </div>
+    </div>
+    <div id="boardList" class="boardlist"></div>
+    <button class="ghost wide" id="boardMore" type="button" hidden>Show more</button>
+  </section>
+
+  <!-- ================= ROSTER ================= -->
+  <section class="view" id="view-roster" hidden>
+    <h2 class="sect">Starters</h2>
+    <div id="starterGrid" class="starters"></div>
+    <h2 class="sect">Bench <span class="sect-note" id="benchCount"></span></h2>
+    <div id="benchList" class="benchlist"></div>
+    <h2 class="sect">Bye weeks</h2>
+    <div id="byeChart" class="byechart"></div>
+    <p class="hint" id="byeHint"></p>
+    <h2 class="sect">Position count</h2>
+    <div id="posCounts" class="poscounts"></div>
+    <div id="summary"></div>
+  </section>
+
+  <!-- ================= DRAFT / SETUP ================= -->
+  <section class="view" id="view-draft" hidden>
+    <h2 class="sect">Live sync</h2>
+    <div class="card">
+      <div class="statusline" id="syncStatusLine">Not connected</div>
+      <label class="field"><span>Sleeper league ID</span>
+        <input id="fLeague" inputmode="numeric" autocomplete="off"></label>
+      <label class="field"><span>Sleeper username</span>
+        <input id="fUser" autocomplete="off" autocapitalize="none"></label>
+      <div class="row2">
+        <label class="field"><span>My draft slot</span>
+          <input id="fSlot" type="number" min="1" max="16" inputmode="numeric"></label>
+        <label class="field"><span>Teams</span>
+          <input id="fTeams" type="number" min="2" max="16" inputmode="numeric"></label>
+      </div>
+      <label class="field"><span>Draft ID (auto)</span>
+        <input id="fDraft" autocomplete="off" placeholder="resolved on connect"></label>
+      <label class="field"><span>Proxy base (only if direct calls fail)</span>
+        <input id="fProxy" autocomplete="off" placeholder="leave empty — see server/proxy.mjs"></label>
+      <label class="tog big"><input type="checkbox" id="fAuto"> Auto-sync picks from Sleeper</label>
+      <div class="btnrow">
+        <button class="primary" id="btnConnect" type="button">Connect</button>
+        <button class="ghost" id="btnDiag" type="button">Test connection</button>
+      </div>
+      <div id="diagOut" class="diag"></div>
+    </div>
+
+    <h2 class="sect">Data</h2>
+    <div class="card">
+      <div class="statusline" id="dataStatusLine"></div>
+      <div class="btnrow">
+        <button class="primary" id="btnPlayers" type="button">Load Sleeper player DB</button>
+      </div>
+      <p class="hint">~5MB, once. Fills in every player's team and bye, adds ADP, and
+         extends the board past the 93 players in the strategy doc. Do this on wifi
+         the night before.</p>
+      <div class="btnrow">
+        <button class="ghost" id="btnPasteRanks" type="button">Paste fresh rankings</button>
+        <button class="ghost" id="btnPasteNotes" type="button">Paste player notes</button>
+        <button class="ghost" id="btnByes" type="button">Bye weeks</button>
+      </div>
+    </div>
+
+    <h2 class="sect">Mark a pick by hand</h2>
+    <div class="card">
+      <input type="search" id="manualSearch" class="search" placeholder="Search a player who was just taken…"
+             autocomplete="off" autocorrect="off" spellcheck="false">
+      <div id="manualResults" class="manualresults"></div>
+      <div class="btnrow">
+        <button class="ghost" id="btnUnknown" type="button">Someone took a player not on my board</button>
+        <button class="ghost" id="btnUndo" type="button">Undo last pick</button>
+      </div>
+    </div>
+
+    <h2 class="sect">Pick log <span class="sect-note" id="logCount"></span></h2>
+    <div id="pickLog" class="picklog"></div>
+
+    <div class="card danger">
+      <button class="ghost danger" id="btnReset" type="button">Reset draft (clears all picks)</button>
+    </div>
+    <p class="hint credit">Board: <span id="boardSrc"></span></p>
+  </section>
+</main>
+
+<nav class="tabbar" id="tabbar">
+  <button class="tab on" data-view="now" type="button"><span class="ti">🎯</span>Now</button>
+  <button class="tab" data-view="board" type="button"><span class="ti">📋</span>Board</button>
+  <button class="tab" data-view="roster" type="button"><span class="ti">👤</span>Roster</button>
+  <button class="tab" data-view="draft" type="button"><span class="ti">⚙️</span>Draft</button>
+</nav>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-bg" data-close="1"></div>
+  <div class="sheet-body" role="dialog" aria-modal="true">
+    <div class="sheet-title" id="sheetTitle"></div>
+    <div id="sheetContent"></div>
+    <button class="ghost wide" data-close="1" type="button">Cancel</button>
+  </div>
+</div>
+
+<script src="data/board.js"></script>
+<script src="data/notes.js"></script>
+<script src="assets/util.js"></script>
+<script src="assets/engine.js"></script>
+<script src="assets/state.js"></script>
+<script src="assets/sleeper.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/main.js"></script>
+</body>
+</html>
