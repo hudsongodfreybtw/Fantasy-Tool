@@ -309,6 +309,16 @@
         .then(function () { b.disabled = false; UI.render(); });
     });
 
+    byId('btnDemo').addEventListener('click', function () {
+      if (Demo.isOn()) { Demo.stop(); return; }
+      UI.Sheet.open({
+        title: 'Start a practice draft?',
+        sub: 'The other 11 teams will draft themselves. Your real draft is saved ' +
+             'and comes back when you stop.',
+        options: [{ label: 'Start practice', cls: 'go', onClick: function () { Demo.start(); } }]
+      });
+    });
+
     byId('btnPasteRanks').addEventListener('click', importRankings);
     byId('btnPasteNotes').addEventListener('click', importNotes);
     byId('btnByes').addEventListener('click', importByes);
@@ -328,8 +338,11 @@
     Sleeper.on(UI.render);
     bind();
     UI.setView('now');
+    Demo.attach();
 
-    if (State.S.settings.autoSync && State.S.settings.draftId) {
+    if (State.S.settings.demoMode) {
+      // practice in progress; leave live sync alone
+    } else if (State.S.settings.autoSync && State.S.settings.draftId) {
       Sleeper.start();
     } else if (State.S.settings.autoSync && State.S.settings.leagueId) {
       Sleeper.connect().then(function () { Sleeper.start(); }).catch(function () {});

@@ -91,6 +91,17 @@
 
   <!-- ================= DRAFT / SETUP ================= -->
   <section class="view" id="view-draft" hidden>
+    <h2 class="sect">Practice draft</h2>
+    <div class="card">
+      <div class="statusline" id="demoStatusLine"></div>
+      <div class="btnrow">
+        <button class="primary" id="btnDemo" type="button">Start practice draft</button>
+      </div>
+      <p class="hint">Runs a fake draft against the real board so you can rehearse
+         before 9/6. The other 11 teams pick themselves; you pick on the Now tab.
+         Your real draft is saved and restored when you stop.</p>
+    </div>
+
     <h2 class="sect">Live sync</h2>
     <div class="card">
       <div class="statusline" id="syncStatusLine">Not connected</div>
@@ -175,6 +186,7 @@
 <script src="assets/engine.js"></script>
 <script src="assets/state.js"></script>
 <script src="assets/sleeper.js"></script>
+<script src="assets/demo.js"></script>
 <script src="assets/ui.js"></script>
 <script src="assets/main.js"></script>
 </body>

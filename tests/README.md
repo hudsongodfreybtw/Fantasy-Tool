@@ -7,6 +7,7 @@ framework — each file is a script that exits non-zero on failure.
 node tests/regress.mjs     # 22 assertions: manual mode, importers, persistence, all tabs
 node tests/livesync.mjs    # live Sleeper sync against a mocked API, pick 7 shortlist
 node tests/fulldraft.mjs   # drives all 16 rounds through the real UI
+node tests/demo.mjs        # practice mode: fake opponents, real-draft backup/restore
 ```
 
 `livesync.mjs` and `fulldraft.mjs` mock `api.sleeper.app` via Playwright route

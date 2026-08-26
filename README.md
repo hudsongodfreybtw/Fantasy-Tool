@@ -42,9 +42,18 @@ refresh mid-draft loses nothing.
 | **Now** | The shortlist. Top 5 picks for *this* pick, one line of why each, plus who'll be gone by your next turn. This is the only screen you need while the clock runs. |
 | **Board** | Every player, filterable by position, grouped into tiers with a live "N left" count so you can see a position about to fall off a cliff. Tap anyone to mark them drafted. |
 | **Roster** | Your starters, empty slots, bench, bye-week distribution, position counts against target. |
-| **Draft** | Sync setup, data refresh, manual pick entry, the full pick log. Set this up before the draft and don't touch it during. |
+| **Draft** | Sync setup, data refresh, manual pick entry, the full pick log, and the practice draft. Set this up before the draft and don't touch it during. |
 
 ---
+
+## Practice draft
+
+Draft tab → **Start practice draft**. Runs a fake 12-team draft against the real
+board and the real engine: the other 11 teams pick themselves (roughly by board
+order, RB/WR early, QB mid, K/DEF last, with some randomness), pausing at each of
+your turns with the clock running. Your real draft is backed up on start and
+restored on stop, and live sync is paused for the duration, so practice can never
+touch a real pick.
 
 ## How the recommendation works
 
@@ -129,6 +138,7 @@ assets/util.js        name matching, snake-draft math, safe storage
 assets/state.js       single source of truth: settings, picks, merged player pool
 assets/engine.js      the value model and recommendation engine
 assets/sleeper.js     live Sleeper API client + polling
+assets/demo.js        practice draft (fake opponents, real engine)
 assets/ui.js          rendering
 assets/main.js        wiring, paste importers
 data/board.js         the player board (regenerate before draft day)

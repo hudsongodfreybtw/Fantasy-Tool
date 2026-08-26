@@ -26,7 +26,8 @@
     rounds: 16,
     autoSync: true,
     pollMs: 3000,
-    pickTimerSec: 60
+    pickTimerSec: 60,
+    demoMode: false
   };
 
   var S = {

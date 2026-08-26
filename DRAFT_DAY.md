@@ -29,6 +29,14 @@ shows nothing timezone-dependent, but set your own alarm for the right zone).
       (Draft tab → Bye weeks).
 - [ ] **Add the page to your phone's home screen** so it opens full-screen.
 
+## Rehearse it once (5 minutes, any time)
+
+Draft tab → **Start practice draft**. The other 11 teams draft themselves, stopping
+at each of your picks with the clock running. Make your 16 picks, look at the
+roster it built, then **Stop practice draft** — your real draft comes back
+untouched. Worth doing once so draft night is muscle memory rather than the first
+time you've seen the thing move.
+
 ## Sunday, 15 minutes before
 
 - [ ] Open the app. Draft tab → check **Auto-sync** is on, hit **Connect**.

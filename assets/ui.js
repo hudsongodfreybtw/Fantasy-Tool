@@ -69,12 +69,17 @@
   function renderTopbar(ctx) {
     var st = State.S.settings, sync = Sleeper.Sync;
     var dot = byId('syncDot'), label = byId('syncLabel');
-    dot.className = 'dot' + (sync.status === 'live' ? ' live'
-      : sync.status === 'error' ? ' err'
-      : sync.status === 'connecting' ? ' conn' : '');
-    label.textContent = sync.status === 'live' ? 'Live'
-      : sync.status === 'connecting' ? 'Connecting'
-      : sync.status === 'error' ? 'Sync error' : 'Manual';
+    if (Demo.isOn()) {
+      dot.className = 'dot conn';
+      label.textContent = 'Practice';
+    } else {
+      dot.className = 'dot' + (sync.status === 'live' ? ' live'
+        : sync.status === 'error' ? ' err'
+        : sync.status === 'connecting' ? ' conn' : '');
+      label.textContent = sync.status === 'live' ? 'Live'
+        : sync.status === 'connecting' ? 'Connecting'
+        : sync.status === 'error' ? 'Sync error' : 'Manual';
+    }
 
     var pn = State.currentPickNo();
     var total = st.teams * st.rounds;
@@ -101,6 +106,13 @@
     var b = byId('banner');
     var health = State.poolHealth();
     var msgs = [];
+    if (Demo.isOn()) {
+      b.hidden = false;
+      b.className = 'banner';
+      b.textContent = 'PRACTICE DRAFT — these picks are not real. ' +
+        'Draft tab → “Stop practice” puts your real draft back.';
+      return;
+    }
     if (!health.hasSleeperDB && health.thin) {
       msgs.push({ bad: false, t: 'Only ' + health.playersLeft + ' players left on the board for ' +
         health.picksLeft + ' remaining picks. Draft tab → “Load Sleeper player DB” to fill it out.' });
@@ -491,6 +503,14 @@
 
     byId('boardSrc').textContent = window.BOARD_DATA.source +
       (window.NOTES_DATA.generated ? ' · notes ' + window.NOTES_DATA.generated : ' · no news layer loaded');
+
+    var demoBtn = byId('btnDemo');
+    demoBtn.textContent = Demo.isOn() ? 'Stop practice draft' : 'Start practice draft';
+    demoBtn.className = Demo.isOn() ? 'ghost danger' : 'primary';
+    byId('demoStatusLine').textContent = Demo.isOn()
+      ? 'Practice running — round ' + U.roundOf(State.currentPickNo(), st.teams) +
+        '. Nothing here touches your real draft.'
+      : 'Not running. Rehearse the whole thing before draft day.';
 
     var log = byId('pickLog'); log.innerHTML = '';
     byId('logCount').textContent = State.S.picks.length + ' picks';
