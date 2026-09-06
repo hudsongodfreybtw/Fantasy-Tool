@@ -62,17 +62,15 @@ window.BOARD_DATA = (function () {
     ["Trey McBride",           "TE", null, 1],
     ["George Pickens",         "WR", null, 4],
     ["Chris Olave",            "WR", null, 4],
-    ["Malik Nabers",           "WR", null, 4],
     ["Jeremiyah Love",         "RB", null, 4],
     ["Lamar Jackson",          "QB", null, 2],
     ["Javonte Williams",       "RB", null, 4],
     ["DeVonta Smith",          "WR", null, 4],
     ["Zay Flowers",            "WR", null, 4],
-    ["Josh Jacobs",            "RB", null, 4],
     ["Tee Higgins",            "WR", null, 4],
     ["Colston Loveland",       "TE", null, 2],
     ["Tyler Warren",           "TE", null, 2],
-    ["Cam Skattebo",           "RB", null, 5],
+    ["Cam Skattebo",           "RB", "NYG", 5],
     ["Breece Hall",            "RB", null, 5],
     ["Rashee Rice",            "WR", null, 5],
     ["Ladd McConkey",          "WR", null, 5],
@@ -84,6 +82,7 @@ window.BOARD_DATA = (function () {
     ["Quinshon Judkins",       "RB", null, 5],
     ["Jaylen Waddle",          "WR", null, 5],
     ["Bucky Irving",           "RB", null, 6],
+    ["MarShawn Lloyd",            "RB", "GB", 6],
     ["Emeka Egbuka",           "WR", null, 6],
     ["David Montgomery",       "RB", null, 6],
     ["Terry McLaurin",         "WR", null, 6],
@@ -113,11 +112,15 @@ window.BOARD_DATA = (function () {
     ["DK Metcalf",             "WR", null, 9],
     ["Chris Godwin",           "WR", null, 9],
     ["Marvin Harrison Jr.",    "WR", null, 9],
+    ["Alec Pierce",               "WR", "IND", 8],
+    ["Stefon Diggs",              "WR", "WAS", 8],
+    ["Tyrone Tracy Jr",           "RB", "NYG", 8],
     ["Tony Pollard",           "RB", null, 7],
     ["Carnell Tate",           "WR", null, 8],
     ["Parker Washington",      "WR", null, 8],
     ["RJ Harvey",              "RB", null, 8],
     ["Jordan Mason",           "RB", null, 8],
+    ["Malik Nabers",              "WR", "NYG", 6],
     ["Kenneth Gainwell",       "RB", null, 8],
     ["Jacory Croskey-Merritt", "RB", null, 8],
     ["J.K. Dobbins",           "RB", null, 8],
@@ -127,7 +130,25 @@ window.BOARD_DATA = (function () {
     ["Trevor Lawrence",        "QB", null, 4],
     ["Travis Kelce",           "TE", null, 4],
     ["Mark Andrews",           "TE", null, 4],
-    ["Dallas Goedert",         "TE", null, 4]
+    ["Dallas Goedert",         "TE", null, 4],
+    ["Kaleb Johnson",             "RB", "GB", 8],
+    ["Josh Jacobs",               "RB", "GB", 9],
+    // Late-round fliers and handcuffs (9/6 sweep)
+    ["Tank Bigsby",               "RB",  null, 8],
+    ["Nick Singleton",            "RB",  null, 8],
+    ["Keaton Mitchell",           "RB",  null, 8],
+    ["Chris Rodriguez Jr.",       "RB",  null, 8],
+    ["Jaydon Blue",               "RB",  null, 8],
+    ["Zachariah Branch",          "WR",  "ATL", 9],
+    // Kickers and defenses (9/6 consensus) - rounds 14-16 only.
+    ["Ka'imi Fairbairn",          "K",   "HOU", 1],
+    ["Jason Myers",               "K",   "SEA", 1],
+    ["Harrison Mevis",            "K",   "LAR", 1],
+    ["HOU D/ST",                  "DEF", "HOU", 1],
+    ["DEN D/ST",                  "DEF", "DEN", 1],
+    ["LAR D/ST",                  "DEF", "LAR", 1],
+    ["SEA D/ST",                  "DEF", "SEA", 1],
+    ["PHI D/ST",                  "DEF", "PHI", 1]
   ];
 
   var players = ROWS.map(function (r, i) {
@@ -141,8 +162,8 @@ window.BOARD_DATA = (function () {
   });
 
   return {
-    generated: '2026-08-25',
-    source: "fantasydraftstrategy.pdf Section 5 (4for4 half-PPR consensus, 8/25/2026)",
+    generated: '2026-09-06',
+    source: "strategy doc 8/25 tiers, revised 9/6 from live news + ADP",
     byes: BYES,
     players: players
   };
