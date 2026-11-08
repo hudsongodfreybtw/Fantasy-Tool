@@ -415,8 +415,8 @@ textarea.csv { width: 100%; min-height: 140px; resize: vertical; border: 1px sol
     return null;
   }
   var dbSave = null;
-  function save() {
-    updatedAt = Date.now();
+  function save(keepTime) {
+    if (!keepTime) updatedAt = Date.now();
     var payload = JSON.stringify({ state: state, updated: updatedAt });
     try { localStorage.setItem(STORE_KEY, payload); } catch (e) { /* ignore */ }
     if (dbSave) dbSave(payload);
@@ -475,7 +475,7 @@ textarea.csv { width: 100%; min-height: 140px; resize: vertical; border: 1px sol
     var denom = Math.max(1, p.unratedTotal - p.excluded);
     $("mBar").style.width = (100 * p.placed / denom) + "%";
     $("mLeft").textContent = p.remaining
-      ? "About " + p.questionsLeftEstimate + " questions left"
+      ? "At most " + p.questionsLeftEstimate + " questions left"
       : p.skipped ? p.skipped + " skipped" : "Done";
 
     var pair = R.currentPair(state);
@@ -801,6 +801,20 @@ textarea.csv { width: 100%; min-height: 140px; resize: vertical; border: 1px sol
   /* ------------------------------------------------------------ Boot */
   state = load() || R.createState(sampleLibrary(), { sample: true });
   renderAll();
+
+  // A library published next to the page (my-library.json, built from a
+  // Letterboxd export) replaces the sample films until real progress exists.
+  if (state.sample && window.fetch) {
+    fetch("my-library.json").then(function (r) { return r.ok ? r.json() : null; }).then(function (lib) {
+      if (!lib || !lib.films || !lib.order || !state.sample) return;
+      state = R.createState(lib, { source: "preloaded" });
+      undoStack = [];
+      // Timestamp 1 so progress already saved to your account still wins.
+      updatedAt = 1;
+      save(true);
+      renderAll();
+    }).catch(function () { /* no preloaded library: keep the sample */ });
+  }
 
   // Optional platform features when this runs as a published artifact:
   // file saving, and a private copy of progress that follows you across devices.

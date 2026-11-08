@@ -144,3 +144,20 @@ test("export lists only derived ratings in Letterboxd import format", () => {
   assert.ok(csv.includes('https://boxd.it/c,"Charlie, Part ""Two""",2003,' + R.computeStars(s)[byTitle(s, 'Charlie, Part "Two"').id].stars));
   assert.ok(!csv.some((l) => l.includes("Alpha")));
 });
+
+test("films below the lowest-rated film bottom out at the 1.5-star soft floor", () => {
+  const s = R.createState(lib()); // anchors: 5, 3, 1
+  // Below a 1-star film the floor is that film's rating, not 1.5.
+  playOut(s, ["Alpha", "Bravo", "Delta", "Echo", 'Charlie, Part "Two"', "Foxtrot"]);
+  const st = R.computeStars(s);
+  assert.equal(st[byTitle(s, "Foxtrot").id].stars, 1);
+
+  const watched = "Date,Name,Year\n2024-01-01,Good,2000\n2024-01-02,Meh,2000\n2024-01-03,Awful,2000\n2024-01-04,Worse,2000";
+  const ratings = "Date,Name,Year,Rating\n2024-01-01,Good,2000,4\n2024-01-02,Meh,2000,2";
+  const s2 = R.createState(R.buildLibrary(R.parseCSV(watched), R.parseCSV(ratings)));
+  playOut(s2, ["Good", "Meh", "Awful", "Worse"]);
+  const st2 = R.computeStars(s2);
+  const awful = st2[byTitle(s2, "Awful").id].stars, worse = st2[byTitle(s2, "Worse").id].stars;
+  assert.ok(awful <= 2 && awful >= 1.5, `awful ${awful}`);
+  assert.equal(worse, 1.5);
+});

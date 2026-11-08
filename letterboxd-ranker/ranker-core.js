@@ -23,6 +23,9 @@
 
   var MIN_STAR = 0.5;
   var MAX_STAR = 5;
+  // Films ranked below your lowest-rated film bottom out here rather than
+  // at ½★ (unless your lowest rating is already under it).
+  var BOTTOM_SOFT_FLOOR = 1.5;
 
   // Used only when there are no rated films to anchor against: a typical
   // Letterboxd-ish spread (percent of films at 0.5, 1, … 5 stars).
@@ -269,7 +272,7 @@
    * Stars for every ranked film: { id: { stars, derived } }.
    * Anchors keep their Letterboxd rating. Each run of unrated films is
    * spread evenly across the gap between the anchors around it (5★ above
-   * the best anchor, ½★ below the worst). With no anchors at all, stars
+   * the best anchor, BOTTOM_SOFT_FLOOR below the worst). With no anchors at all, stars
    * follow DEFAULT_SPREAD by rank percentile.
    */
   function computeStars(state) {
@@ -304,7 +307,7 @@
         var j = i;
         while (j < n && !isAnchor(state, ranked[j])) j++;
         var hi = prevRating;
-        var lo = j < n ? state.films[ranked[j]].r : MIN_STAR;
+        var lo = j < n ? state.films[ranked[j]].r : Math.min(BOTTOM_SOFT_FLOOR, prevRating);
         var k = j - i;
         for (var m = 0; m < k; m++) {
           var v = hi - ((m + 1) / (k + 1)) * (hi - lo);
@@ -386,6 +389,7 @@
   return {
     MIN_STAR: MIN_STAR,
     MAX_STAR: MAX_STAR,
+    BOTTOM_SOFT_FLOOR: BOTTOM_SOFT_FLOOR,
     parseCSV: parseCSV,
     buildLibrary: buildLibrary,
     createState: createState,

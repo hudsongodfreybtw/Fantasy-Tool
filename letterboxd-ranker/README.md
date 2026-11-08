@@ -20,7 +20,7 @@ Progress saves automatically in the browser (and to your account when it runs as
 - Films you've **already rated** are fixed reference points. They start the ranking in star order and keep their ratings.
 - Each unrated film is placed with a **binary search**: every answer halves the range it could land in, so placing a film among 500 others takes about 9 answers.
 - The search **stops early** once every remaining spot falls between two reference films with the same rating, since more answers couldn't change its stars.
-- A run of new films between two reference films is **spread evenly** across that gap and rounded to the nearest half star. A film between a 5★ and a 3★ lands at 4★; three films between 4★ and 3★ come out 4, 3½, 3. Above your best-rated film the ceiling is 5★; below your worst it's ½★.
+- A run of new films between two reference films is **spread evenly** across that gap and rounded to the nearest half star. A film between a 5★ and a 3★ lands at 4★; three films between 4★ and 3★ come out 4, 3½, 3. Above your best-rated film the ceiling is 5★. Below your worst-rated film there's a soft floor of 1½★ (`BOTTOM_SOFT_FLOOR` in `ranker-core.js`), or your lowest rating if that's already under 1½★.
 - If you have no ratings at all, stars follow a typical spread by rank (most films 3–4★).
 
 The export contains only the films rated here, so your existing Letterboxd ratings are left alone.
